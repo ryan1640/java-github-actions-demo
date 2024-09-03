@@ -6,7 +6,7 @@
 # nightvision auth playwright create javaspringvulny-api https://127.0.0.1:9000
 
 ## Optional steps can be preformed locally or in the pipeline
-# nightvision swagger extract ./ -t javaspringvulny-api --lang spring
+# nightvision swagger extract . -t javaspringvulny-api --lang spring
 # nightvision scan javaspringvulny-api -a javaspringvulny-api
 
 trigger:
@@ -30,7 +30,7 @@ stages:
       displayName: 'Install NightVision'
 
     - script: |
-        nightvision swagger extract ./ -t $NIGHTVISION_TARGET --lang spring || true
+        nightvision swagger extract . -t $NIGHTVISION_TARGET --lang spring || true
         if [ ! -e openapi-spec.yml ]; then
           cp backup-openapi-spec.yml openapi-spec.yml
         fi
