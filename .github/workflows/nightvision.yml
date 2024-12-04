@@ -6,8 +6,8 @@
 # nightvision auth playwright create javaspringvulny-api https://127.0.0.1:9000
 
 ## Optional steps can be preformed locally or in the pipeline
-# nightvision swagger extract . -t javaspringvulny-api --lang spring
-# nightvision scan javaspringvulny-api -a javaspringvulny-api --auth javaspringvulny-api
+# nightvision swagger extract . -t javaspringvulny-api --lang java
+# nightvision scan javaspringvulny-api --auth javaspringvulny-api
 
 name: Test Case - Java Spring App
 
@@ -20,7 +20,6 @@ on:
 env:
   NIGHTVISION_TOKEN: ${{ secrets.NIGHTVISION_TOKEN }}
   NIGHTVISION_TARGET: javaspringvulny-api
-  NIGHTVISION_APP: javaspringvulny-api
   NIGHTVISION_AUTH: javaspringvulny-api
   
 jobs:
@@ -39,7 +38,7 @@ jobs:
 
       - name: (3) Extract API documentation from code
         run: |
-          nightvision swagger extract ./ -t ${NIGHTVISION_TARGET} --lang spring || true
+          nightvision swagger extract . -t ${NIGHTVISION_TARGET} --lang java || true
           if [ ! -e openapi-spec.yml ]; then
               cp backup-openapi-spec.yml openapi-spec.yml
           fi
@@ -49,7 +48,7 @@ jobs:
 
       - name: (5) Scan the API
         run: |
-          nightvision scan ${NIGHTVISION_TARGET} -a ${NIGHTVISION_APP} --auth ${NIGHTVISION_AUTH} > scan-results.txt
+          nightvision scan ${NIGHTVISION_TARGET} --auth ${NIGHTVISION_AUTH} > scan-results.txt
           nightvision export sarif -s "$(head -n 1 scan-results.txt)" --swagger-file openapi-spec.yml
 
       - name: (6) Upload SARIF file to GitHub Security Alerts if vulnerabilities are found
