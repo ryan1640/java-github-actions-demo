@@ -34,9 +34,7 @@ jobs:
           fi
 
       - name: (4) Start the app
-        run: |
-          docker-compose up -d
-          sleep 10
+        run: docker-compose up -d; sleep 10
 
       - name: (5) Scan the API
         run: |
