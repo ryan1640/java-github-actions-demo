@@ -46,7 +46,7 @@ jobs:
           sarif_file: results.sarif
       - name: (7) Install nightvision slack importer and dependencies
         run: |
-          git clone https://github.com/jxbt/nightvision_slack_importer.git
+          git clone https://github.com/ryan1640/nightvision_slack_importer.git
           cd nightvision_slack_importer
           chmod +x install.sh && sudo ./install.sh
           python3 -m venv .venv
