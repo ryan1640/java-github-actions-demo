@@ -51,6 +51,29 @@ jobs:
           nightvision scan ${NIGHTVISION_TARGET} --auth ${NIGHTVISION_AUTH} > scan-results.txt
           nightvision export sarif -s "$(head -n 1 scan-results.txt)" --swagger-file openapi-spec.yml
 
+      - name: (5.5) Remap info-level findings to warning for GitHub visibility
+        run: |
+          python3 << 'EOF'
+          import json
+    
+          # Read the SARIF file
+          with open('results.sarif', 'r') as f:
+            sarif = json.load(f)
+    
+          # Remap "note" level to "warning" so GitHub displays them
+          for run in sarif.get('runs', []):
+            for result in run.get('results', []):
+              if result.get('level') == 'note':
+                  result['level'] = 'warning'
+                  print(f"Remapped: {result.get('message', {}).get('text', 'Unknown')}")
+    
+          # Write back the modified SARIF
+          with open('results.sarif', 'w') as f:
+            json.dump(sarif, f, indent=2)
+    
+          print("\n✅ Successfully remapped info-level findings to warning")
+          EOF
+
       - name: (6) Upload SARIF file to GitHub Security Alerts if Vulnerabilities are found
         uses: github/codeql-action/upload-sarif@v3
         if: success()
