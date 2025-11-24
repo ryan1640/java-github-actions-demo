@@ -48,7 +48,7 @@ jobs:
       - name: (5) Scan the API
         run: |
           nightvision scan ${NIGHTVISION_TARGET} --auth ${NIGHTVISION_AUTH} > scan-results.txt
-          nightvision export sarif -s "$(head -n 1 scan-results.txt)" --swagger-file openapi-spec.yml
+          nightvision export sarif -s "$(head -n 1 scan-results.txt)" --spec-file openapi-spec.yml
 
       - name: (5.5) Remap info-level findings to warning for GitHub visibility
         run: |
